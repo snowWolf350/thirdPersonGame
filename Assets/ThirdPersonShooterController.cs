@@ -15,6 +15,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     ThirdPersonController thirdPersonController;
 
     Vector2 screenCentrePoint = new Vector2(Screen.width/2, Screen.height/2);
+    Vector3 mouseWorldPosition = Vector3.zero;
 
 
     private void Awake()
@@ -24,21 +25,32 @@ public class ThirdPersonShooterController : MonoBehaviour
     }
     private void Update()
     {
+
+        Ray ray = Camera.main.ScreenPointToRay(screenCentrePoint);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimLayerMask))
+        {
+            mouseWorldPosition = raycastHit.point;
+            debugTransform.position = mouseWorldPosition;
+        }
+
         if (starterAssetsInputs.aim)
         {
             aimVirtualCamera.gameObject.SetActive(true);
             thirdPersonController.SetSensitivity(aimSensitivity);
+            thirdPersonController.setRotateOnMove(false);
+
+            Vector3 worldAimTarget = mouseWorldPosition;
+            worldAimTarget.y = transform.position.y;
+            Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+            transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20);
         }
         else
         {
             aimVirtualCamera.gameObject.SetActive(false);
             thirdPersonController.SetSensitivity(normalSensitivity);
+            thirdPersonController.setRotateOnMove(true);
         }
 
-        Ray ray = Camera.main.ScreenPointToRay(screenCentrePoint);
-        if (Physics.Raycast(ray,out RaycastHit raycastHit, 999f, aimLayerMask))
-        {
-            debugTransform.position = raycastHit.point;
-        }
     }
 }

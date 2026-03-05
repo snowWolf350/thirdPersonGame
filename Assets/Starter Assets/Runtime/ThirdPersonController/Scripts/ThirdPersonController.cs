@@ -87,6 +87,7 @@ namespace StarterAssets
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
+        private bool rotateOnMove = true;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -262,7 +263,10 @@ namespace StarterAssets
                     RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                if (rotateOnMove)
+                {
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f); 
+                }
             }
 
 
@@ -393,6 +397,11 @@ namespace StarterAssets
         public void SetSensitivity(float newSensitivity)
         {
             sensitivity = newSensitivity;
+        }
+
+        public void setRotateOnMove(bool newRotateOnMove)
+        {
+            rotateOnMove = newRotateOnMove;
         }
     }
 }
