@@ -1,26 +1,29 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class bulletProjectile : MonoBehaviour
 {
-    Rigidbody bulletRigidbody;
+    Rigidbody _bulletRigidbody;
+    [SerializeField]GameObject _BulletImpactFX;
     float speed = 40;
     int damageAmount = 10;
     private void Awake()
     {
-        bulletRigidbody = GetComponent<Rigidbody>();
+        _bulletRigidbody = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
-        bulletRigidbody.linearVelocity = transform.forward * speed;   
+        _bulletRigidbody.linearVelocity = transform.forward * speed;   
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.TryGetComponent(out Enemy enemy))
+        if (collision.gameObject.TryGetComponent(out Enemy enemy))
         {
             //this hit an enemy
             enemy.EnemyDamaged(damageAmount);
         }
+        Instantiate(_BulletImpactFX, collision.GetContact(0).point,Quaternion.identity);
         Destroy(gameObject);
     }
 }

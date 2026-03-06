@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using StarterAssets;
+using Unity.VisualScripting;
 
 public class ThirdPersonShooterController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] float aimSensitivity;
     [SerializeField] LayerMask aimLayerMask = new LayerMask();
     [SerializeField] Transform bulletPrefab;
+    [SerializeField] Transform debugPrefab;
     [SerializeField] Transform spawnBulletTransform;
 
     StarterAssetsInputs starterAssetsInputs;
@@ -30,6 +32,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimLayerMask))
         {
             mouseWorldPosition = raycastHit.point;
+            //debugPrefab.position = raycastHit.point;
         }
 
         if (starterAssetsInputs.aim)
