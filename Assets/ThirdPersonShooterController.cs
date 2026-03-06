@@ -10,6 +10,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] float aimSensitivity;
     [SerializeField] LayerMask aimLayerMask = new LayerMask();
     [SerializeField] Transform debugTransform;
+    [SerializeField] Transform bulletPrefab;
+    [SerializeField] Transform spawnBulletTransform;
 
     StarterAssetsInputs starterAssetsInputs;
     ThirdPersonController thirdPersonController;
@@ -52,5 +54,11 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.setRotateOnMove(true);
         }
 
+        if (starterAssetsInputs.shoot)
+        {
+            Vector3 aimDir = (mouseWorldPosition - spawnBulletTransform.position).normalized;
+            Instantiate(bulletPrefab,spawnBulletTransform.position,Quaternion.LookRotation(aimDir,Vector3.up));
+            starterAssetsInputs.shoot = false;
+        }
     }
 }
