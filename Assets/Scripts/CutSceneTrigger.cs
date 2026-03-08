@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Playables;
 
 public class CutSceneTrigger : MonoBehaviour
@@ -8,6 +10,8 @@ public class CutSceneTrigger : MonoBehaviour
 
     BoxCollider _boxCollider;
     PlayableDirector _playableDirector;
+
+    [Header("The timeline GameObject")]
     [SerializeField] GameObject _timelineGameObject;
 
     private void Start()
@@ -20,20 +24,16 @@ public class CutSceneTrigger : MonoBehaviour
     {
         if (other.transform.GetComponent<ThirdPersonShooterController>() == null) return;
         
-        //plaayer hit the collider 
+        //player hit the collider 
         if (_OnCollisionTrigger)
         {
-            StartCoroutine(PlayCutscene());
+            _playableDirector.Play();
+            _boxCollider.enabled = false;
         }
     }
 
-    IEnumerator PlayCutscene()
+    public void DestroSelf()
     {
-        _playableDirector.Play();
-        _boxCollider.enabled = false;   
-        yield return new WaitForSeconds((float)_playableDirector.duration);
-        Destroy(_playableDirector.gameObject);
         Destroy(gameObject);
     }
-
 }

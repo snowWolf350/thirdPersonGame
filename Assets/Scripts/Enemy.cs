@@ -16,13 +16,16 @@ public class Enemy : MonoBehaviour,IHasProgress
     float _shootDelayMax = 4;
     float _playerHeightOffset = .1f;
 
-    enum _enemyState
+    public event EventHandler OnEnemyDeath;
+
+    [Serializable]
+    public enum enemyState
     {
         idle,
         attack,
     }
 
-    _enemyState _currentEnemyState;
+    enemyState _currentEnemyState;
 
     public event EventHandler<IHasProgress.onProgressChangedEventArgs> onProgressChanged;
 
@@ -35,16 +38,16 @@ public class Enemy : MonoBehaviour,IHasProgress
             progressNormalized = 1
         });
 
-        _currentEnemyState = _enemyState.attack;
+        _currentEnemyState = enemyState.idle;
     }
 
     private void Update()
     {
         switch( _currentEnemyState )
         {
-            case _enemyState.idle:
+            case enemyState.idle:
                 break;
-            case _enemyState.attack:
+            case enemyState.attack:
                 shoot();
                 break;
         }
@@ -69,11 +72,21 @@ public class Enemy : MonoBehaviour,IHasProgress
         if(other.CompareTag("Player") == false) return;
     }
 
+    public void SetIdleState()
+    {
+        _currentEnemyState = enemyState.idle;
+    }
+    public void SetAttackState()
+    {
+        _currentEnemyState = enemyState.attack;
+    }
+
     public void EnemyDamaged(int damageAmount)
     {
         _enemyHealth -= damageAmount;
         if (_enemyHealth <= 0)
         {
+            OnEnemyDeath?.Invoke(this,EventArgs.Empty);
             Destroy(gameObject);
         }
 
