@@ -30,7 +30,7 @@ public class CutSceneTrigger : MonoBehaviour
     IEnumerator PlayCutscene()
     {
         _playableDirector.Play();
-        _boxCollider.enabled = false;
+        _boxCollider.enabled = false;   
         yield return new WaitForSeconds((float)_playableDirector.duration);
         Destroy(_playableDirector.gameObject);
         Destroy(gameObject);

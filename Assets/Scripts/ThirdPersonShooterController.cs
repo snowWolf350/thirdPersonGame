@@ -1,7 +1,6 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using StarterAssets;
-using Unity.VisualScripting;
 
 public class ThirdPersonShooterController : MonoBehaviour
 {
