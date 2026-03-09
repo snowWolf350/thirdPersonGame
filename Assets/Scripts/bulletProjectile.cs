@@ -26,4 +26,9 @@ public class bulletProjectile : MonoBehaviour
         Instantiate(_BulletImpactFX, collision.GetContact(0).point,Quaternion.identity);
         Destroy(gameObject);
     }
+
+    public void DestroySelf()
+    {
+        Destroy(gameObject);    
+    }
 }
