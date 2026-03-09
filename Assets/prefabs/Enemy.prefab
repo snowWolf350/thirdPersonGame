@@ -296,13 +296,14 @@ GameObject:
   - component: {fileID: 1008961082071732887}
   - component: {fileID: 1783657170110025069}
   - component: {fileID: 8327270184647330835}
+  - component: {fileID: 166375088961269637}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &10758083405107658
 Transform:
   m_ObjectHideFlags: 0
@@ -379,6 +380,33 @@ MonoBehaviour:
   _playerTransform: {fileID: 0}
   _enemyBullet: {fileID: 4399134987321242627, guid: b9caf53672b0937458080ef79140d704, type: 3}
   _enemyBulletSpawn: {fileID: 4851828687714915164}
+--- !u!54 &166375088961269637
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7134480839614936297}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!1 &7408532012427545294
 GameObject:
   m_ObjectHideFlags: 0
