@@ -2,10 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Enemy : MonoBehaviour,IHasProgress
+public class Enemy : MonoBehaviour,IHasProgress,IDamagable
 {
-    int _enemyHealthMax = 100;
-    int _enemyHealth;
+    HealthSystem _healthSystem;
 
     SphereCollider _sphereCollider;
 
@@ -48,7 +47,7 @@ public class Enemy : MonoBehaviour,IHasProgress
 
     private void Start()
     {
-        _enemyHealth = _enemyHealthMax;
+        _healthSystem = new HealthSystem(100);
         _sphereCollider = GetComponent<SphereCollider>();
         _rigidBody = GetComponent<Rigidbody>();
         _playerTransform = GlobalReferences.Instance.PlayerTransform;
@@ -59,8 +58,9 @@ public class Enemy : MonoBehaviour,IHasProgress
 
         _currentEnemyState = enemyState.idle;
         _shootDelayTimerMax= UnityEngine.Random.Range(_shootDelayMin, _shootDelayMax);
-    }
 
+        _healthSystem.onDeath += _healthSystem_onDeath;
+    }
     private void Update()
     {
         switch( _currentEnemyState )
@@ -135,19 +135,18 @@ public class Enemy : MonoBehaviour,IHasProgress
     {
         _currentEnemyState = enemyState.attack;
     }
-
-    public void EnemyDamaged(int damageAmount)
+    private void _healthSystem_onDeath(object sender, EventArgs e)
     {
-        _enemyHealth -= damageAmount;
-        if (_enemyHealth <= 0)
-        {
-            OnEnemyDeath?.Invoke(this,EventArgs.Empty);
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
+    }
+
+    public void TakeDamage(int damageAmount, Vector3 damagePoint)
+    {
+        _healthSystem.TakeDamage(damageAmount);
 
         onProgressChanged?.Invoke(this, new IHasProgress.onProgressChangedEventArgs
         {
-            progressNormalized = (float)_enemyHealth / _enemyHealthMax
+            progressNormalized = _healthSystem.GetHealthNormalized()
         });
     }
 }

@@ -18,12 +18,11 @@ public class bulletProjectile : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent(out Enemy enemy))
+        if(collision.gameObject.TryGetComponent(out IDamagable damagable))
         {
-            //this hit an enemy
-            enemy.EnemyDamaged(damageAmount);
+            damagable.TakeDamage(damageAmount, collision.GetContact(0).point);
         }
-        Instantiate(_BulletImpactFX, collision.GetContact(0).point,Quaternion.identity);
+        Instantiate(_BulletImpactFX, collision.GetContact(0).point, Quaternion.identity);
         Destroy(gameObject);
     }
 
