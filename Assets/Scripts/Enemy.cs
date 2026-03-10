@@ -6,8 +6,6 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
 {
     HealthSystem _healthSystem;
 
-    SphereCollider _sphereCollider;
-
     [SerializeField] Transform _playerTransform;
     [SerializeField] Transform _enemyBullet;
     [SerializeField] Transform _enemyBulletSpawn;
@@ -32,8 +30,6 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
 
     Rigidbody _rigidBody;
 
-    public event EventHandler OnEnemyDeath;
-
     [Serializable]
     public enum enemyState
     {
@@ -45,10 +41,13 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
 
     public event EventHandler<IHasProgress.onProgressChangedEventArgs> onProgressChanged;
 
-    private void Start()
+    private void Awake()
     {
         _healthSystem = new HealthSystem(100);
-        _sphereCollider = GetComponent<SphereCollider>();
+    }
+
+    private void Start()
+    {
         _rigidBody = GetComponent<Rigidbody>();
         _playerTransform = GlobalReferences.Instance.PlayerTransform;
         onProgressChanged?.Invoke(this, new IHasProgress.onProgressChangedEventArgs
@@ -94,22 +93,37 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
     {
             //move the enemy
 
-            float moveX, moveY,moveZ;
-            Vector3 moveDir;
-        for (int i = 0; i < 10; i++)
+        float moveX = 0, moveY =0,moveZ = 0;
+        Vector3 moveDir = Vector3.zero;
+        Vector3 halfExtends = new Vector3(0.5f, 0.5f, 0.5f);
+
+        if(!Physics.BoxCast(transform.position + new Vector3(0,0,1f),halfExtends,Vector3.forward))
         {
-            moveX = UnityEngine.Random.Range(_xOffsetMin, _xOffsetMax);
-            moveY = UnityEngine.Random.Range(_yOffsetMin, _yOffsetMax);
-            moveZ = UnityEngine.Random.Range(_zOffsetMin, _zOffsetMax);
-
-            moveDir = new Vector3(moveX, moveY, moveZ);
-            Debug.DrawLine(transform.position, moveDir);
-
-            if (Physics.Raycast(transform.position, moveDir.normalized))
-                return moveDir;
+            moveZ = UnityEngine.Random.Range(0, _zOffsetMax);
+            if (!Physics.BoxCast(transform.position - new Vector3(0, 0, 1f), halfExtends, Vector3.back))
+            {
+                moveZ = UnityEngine.Random.Range(_zOffsetMin, _zOffsetMax);
+            }
         }
+        if (!Physics.BoxCast(transform.position + new Vector3(0, 1, 0f), halfExtends, Vector3.up))
+        {
+            moveZ = UnityEngine.Random.Range(0, _zOffsetMax);
+            if (!Physics.BoxCast(transform.position - new Vector3(0, 1, 0), halfExtends, Vector3.down))
+            {
+                moveY = UnityEngine.Random.Range(_yOffsetMin, _yOffsetMax);
+            }
+        }
+        if (!Physics.BoxCast(transform.position + new Vector3(1,0, 0f), halfExtends, Vector3.right))
+        {
+            moveZ = UnityEngine.Random.Range(0, _zOffsetMax);
+            if (!Physics.BoxCast(transform.position - new Vector3(1, 0, 0), halfExtends, Vector3.left))
+            {
+                moveX = UnityEngine.Random.Range(_yOffsetMin, _yOffsetMax);
+            }
+        }
+        moveDir = new Vector3(moveX, moveY, moveZ);
 
-        return Vector3.zero;
+        return moveDir;
 
     }
 
@@ -148,5 +162,10 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
         {
             progressNormalized = _healthSystem.GetHealthNormalized()
         });
+    }
+
+    public HealthSystem GetHealthSystem()
+    {
+        return _healthSystem;
     }
 }

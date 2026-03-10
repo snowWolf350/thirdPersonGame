@@ -7,20 +7,20 @@ public class ClearEnemies : MonoBehaviour
     [Header("Enemies in room")]
     [SerializeField]List<Enemy> _enemyList;
 
-    int _remainingEnemies;
+    int _remainingEnemies = 0;
 
     public UnityEvent OnRoomCleared;
 
-    private void Start()
+    private void OnEnable()
     {
         foreach (Enemy enemy in _enemyList)
         {
-            enemy.OnEnemyDeath += Enemy_OnEnemyDeath;
+            enemy.GetHealthSystem().onDeath += Enemy_OnDeath;
         }
         _remainingEnemies = _enemyList.Count;
     }
 
-    private void Enemy_OnEnemyDeath(object sender, System.EventArgs e)
+    private void Enemy_OnDeath(object sender, System.EventArgs e)
     {
         Debug.Log("enemy Died");
         _remainingEnemies--;
