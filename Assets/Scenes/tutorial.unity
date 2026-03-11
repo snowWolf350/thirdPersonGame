@@ -1930,6 +1930,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1180406659}
+  - component: {fileID: 1180406660}
   m_Layer: 8
   m_Name: robot
   m_TagString: Untagged
@@ -1953,6 +1954,21 @@ Transform:
   - {fileID: 3258692101136427939}
   m_Father: {fileID: 3893294199011942880}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1180406660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180406658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2b23e158b89f12488aa7feaca759332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Robot
+  aimLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1317809994
 GameObject:
   m_ObjectHideFlags: 0
