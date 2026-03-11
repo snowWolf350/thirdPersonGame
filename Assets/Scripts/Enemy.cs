@@ -16,14 +16,11 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
     float _shootDelayMax = 3;
     float _playerHeightOffset = .1f;
 
-    const float _xOffsetMin = -1;
-    const float _xOffsetMax = 1;
-    const float _yOffsetMin = -1;
-    const float _yOffsetMax = 1;
-    const float _zOffsetMin = -1;
-    const float _zOffsetMax = 1;
+    const float _moveOffsetMin = -1;
+    const float _moveOffsetMax = 1;
 
     float _lerpTimer = 0;
+    float _moveDuration = 4;
     Vector3 startPos;
     Vector3 finalPos;
     bool _movingStarted = false;
@@ -77,7 +74,7 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
                     if (_lerpTimer < 1)
                     {
                         _rigidBody.MovePosition(Vector3.Lerp(startPos, finalPos, _lerpTimer));
-                        _lerpTimer += Time.deltaTime;
+                        _lerpTimer += Time.deltaTime/_moveDuration;
                     }
                     else
                     {
@@ -89,38 +86,46 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (_currentEnemyState == enemyState.attack)
+        {
+            HandleMovement();
+        }
+    }
+    void HandleMovement()
+    {
+        if (!_movingStarted)
+        {
+            _movingStarted = true;
+            finalPos = transform.position + GetRandomMoveDirection();
+            startPos = transform.position;
+        }
+        if (_lerpTimer < 1)
+        {
+            _rigidBody.MovePosition(Vector3.Lerp(startPos, finalPos, _lerpTimer));
+            _lerpTimer += Time.fixedDeltaTime / _moveDuration;
+        }
+        else
+        {
+            _lerpTimer = 0;
+            _rigidBody.position = finalPos;
+            _movingStarted = false;
+        }
+
+    }
+
     private Vector3 GetRandomMoveDirection()
     {
             //move the enemy
 
         float moveX = 0, moveY =0,moveZ = 0;
-        Vector3 moveDir = Vector3.zero;
-        Vector3 halfExtends = new Vector3(0.5f, 0.5f, 0.5f);
+        Vector3 moveDir;
 
-        if(!Physics.BoxCast(transform.position + new Vector3(0,0,1f),halfExtends,Vector3.forward))
-        {
-            moveZ = UnityEngine.Random.Range(0, _zOffsetMax);
-            if (!Physics.BoxCast(transform.position - new Vector3(0, 0, 1f), halfExtends, Vector3.back))
-            {
-                moveZ = UnityEngine.Random.Range(_zOffsetMin, _zOffsetMax);
-            }
-        }
-        if (!Physics.BoxCast(transform.position + new Vector3(0, 1, 0f), halfExtends, Vector3.up))
-        {
-            moveZ = UnityEngine.Random.Range(0, _zOffsetMax);
-            if (!Physics.BoxCast(transform.position - new Vector3(0, 1, 0), halfExtends, Vector3.down))
-            {
-                moveY = UnityEngine.Random.Range(_yOffsetMin, _yOffsetMax);
-            }
-        }
-        if (!Physics.BoxCast(transform.position + new Vector3(1,0, 0f), halfExtends, Vector3.right))
-        {
-            moveZ = UnityEngine.Random.Range(0, _zOffsetMax);
-            if (!Physics.BoxCast(transform.position - new Vector3(1, 0, 0), halfExtends, Vector3.left))
-            {
-                moveX = UnityEngine.Random.Range(_yOffsetMin, _yOffsetMax);
-            }
-        }
+        moveX = UnityEngine.Random.Range(_moveOffsetMin,_moveOffsetMax);
+        moveY = UnityEngine.Random.Range(_moveOffsetMin,_moveOffsetMax);
+        moveZ = UnityEngine.Random.Range(_moveOffsetMin,_moveOffsetMax);
+
         moveDir = new Vector3(moveX, moveY, moveZ);
 
         return moveDir;
