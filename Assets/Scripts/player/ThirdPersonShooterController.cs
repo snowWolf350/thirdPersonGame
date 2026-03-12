@@ -1,8 +1,9 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using StarterAssets;
+using System;
 
-public class ThirdPersonShooterController : MonoBehaviour
+public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagable
 {
     [SerializeField] CinemachineCamera aimVirtualCamera;
     [SerializeField] float normalSensitivity;
@@ -18,9 +19,13 @@ public class ThirdPersonShooterController : MonoBehaviour
     Vector2 screenCentrePoint = new Vector2(Screen.width/2, Screen.height/2);
     Vector3 mouseWorldPosition = Vector3.zero;
 
+    HealthSystem _healthSystem;
+
+    public event EventHandler<IHasProgress.onProgressChangedEventArgs> onProgressChanged;
 
     private void Awake()
     {
+        _healthSystem = new HealthSystem(100);
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
         thirdPersonController = GetComponent<ThirdPersonController>();
     }
@@ -59,5 +64,14 @@ public class ThirdPersonShooterController : MonoBehaviour
             Instantiate(bulletPrefab,spawnBulletTransform.position,Quaternion.LookRotation(aimDir,Vector3.up));
             starterAssetsInputs.shoot = false;
         }
+    }
+
+    public void TakeDamage(int damageAmount, Vector3 damagePoint)
+    {
+        _healthSystem.TakeDamage(damageAmount);
+        onProgressChanged?.Invoke(this, new IHasProgress.onProgressChangedEventArgs
+        {
+            progressNormalized = _healthSystem.GetHealthNormalized()
+        });
     }
 }
