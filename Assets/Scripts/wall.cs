@@ -19,7 +19,7 @@ public class wall : MonoBehaviour,IDamagable
         Transform brokenWall = Instantiate(_brokenWall, transform.position, Quaternion.identity);
         foreach (Transform child in brokenWall)
         {
-            child.GetComponent<Rigidbody>().AddExplosionForce(100, lastDamagePosition, 2f);
+            child.GetComponent<Rigidbody>().AddExplosionForce(999, lastDamagePosition, 2f);
         }
         Destroy(gameObject);
     }

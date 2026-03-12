@@ -10,8 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 040ad716154bb1f4c84d10bbb70fcc0d, type: 3}
-  m_Name: move
+  m_Name: jump
   m_EditorClassIdentifier: Assembly-CSharp::TutorialSO
   Heading: Movement
-  Content: Use <b><color=yellow>WASD / Arrow Keys </color></b>to move, and <b><color=yellow>Left
-    Shift</color></b> to sprint.
+  Content: Press <b><color=yellow>SpaceBar</color></b> to jump.

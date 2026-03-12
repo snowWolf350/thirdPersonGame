@@ -2,20 +2,22 @@ using UnityEngine;
 
 public class KillZone : MonoBehaviour
 {
+    BoxCollider _boxCollider;
+
+    private void Awake()
+    {
+        _boxCollider = GetComponent<BoxCollider>();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if (other.GetComponent<bulletProjectile>() != null)
+            if (other.transform.TryGetComponent(out ThirdPersonShooterController playerController))
             {
-                //this is a bullet
-                other.GetComponent<bulletProjectile>().DestroySelf();
-            }
-            else
-            {
-                //kill the player
-                Debug.Log("Player fell");
+                Debug.Log("running respawn");
+                playerController.RespawnPlayer();
             }
         }
     }
+
 }

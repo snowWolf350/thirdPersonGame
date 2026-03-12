@@ -12,6 +12,7 @@ public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagabl
     [SerializeField] Transform bulletPrefab;
     [SerializeField] Transform debugPrefab;
     [SerializeField] Transform spawnBulletTransform;
+    [SerializeField] Transform spawnTransform;
 
     StarterAssetsInputs starterAssetsInputs;
     ThirdPersonController thirdPersonController;
@@ -29,6 +30,7 @@ public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagabl
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
         thirdPersonController = GetComponent<ThirdPersonController>();
     }
+
     private void Update()
     {
 
@@ -74,4 +76,21 @@ public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagabl
             progressNormalized = _healthSystem.GetHealthNormalized()
         });
     }
+    public void RespawnPlayer()
+    {
+        Vector3 playerOffset = new Vector3(0, 2, 0);
+
+        CharacterController cc = GetComponent<CharacterController>();
+
+        cc.enabled = false;
+
+        transform.position = spawnTransform.position + playerOffset;
+
+        cc.enabled = true;
+
+        thirdPersonController.resetVerticalVelocity();
+
+        _healthSystem.ResetHealth();
+    }
+
 }

@@ -403,5 +403,9 @@ namespace StarterAssets
         {
             rotateOnMove = newRotateOnMove;
         }
+        public void resetVerticalVelocity()
+        {
+            _verticalVelocity = 0;
+        }
     }
 }

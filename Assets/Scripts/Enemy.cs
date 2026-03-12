@@ -19,9 +19,6 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
     const float _moveOffsetMin = -1;
     const float _moveOffsetMax = 1;
 
-    float _lerpTimer = 0;
-    float _moveDuration = 4;
-    Vector3 startPos;
     Vector3 finalPos;
     bool _movingStarted = false;
 
@@ -65,24 +62,7 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
                 break;
             case enemyState.attack:
                 shoot();
-                    if (!_movingStarted)
-                    {
-                        _movingStarted = true;
-                        finalPos = transform.position + GetRandomMoveDirection();
-                        startPos = transform.position;
-                    }
-                    if (_lerpTimer < 1)
-                    {
-                        _rigidBody.MovePosition(Vector3.Lerp(startPos, finalPos, _lerpTimer));
-                        _lerpTimer += Time.deltaTime/_moveDuration;
-                    }
-                    else
-                    {
-                        _lerpTimer = 0;
-                        transform.position = finalPos;
-                        _movingStarted = false;
-                    }
-                break;
+            break;
         }
     }
 
@@ -98,38 +78,31 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
         if (!_movingStarted)
         {
             _movingStarted = true;
-            finalPos = transform.position + GetRandomMoveDirection();
-            startPos = transform.position;
-        }
-        if (_lerpTimer < 1)
-        {
-            _rigidBody.MovePosition(Vector3.Lerp(startPos, finalPos, _lerpTimer));
-            _lerpTimer += Time.fixedDeltaTime / _moveDuration;
-        }
-        else
-        {
-            _lerpTimer = 0;
-            _rigidBody.position = finalPos;
-            _movingStarted = false;
+            finalPos = _rigidBody.position + GetRandomMoveDirection();
         }
 
+        float speed = 1.5f;
+
+        Vector3 newPos = Vector3.MoveTowards(
+            _rigidBody.position,
+            finalPos,
+            speed * Time.fixedDeltaTime
+        );
+
+        _rigidBody.MovePosition(newPos);
+
+        if (Vector3.Distance(_rigidBody.position, finalPos) < 0.05f)
+        {
+            _movingStarted = false;
+        }
     }
 
     private Vector3 GetRandomMoveDirection()
     {
-            //move the enemy
+        float moveX = UnityEngine.Random.Range(_moveOffsetMin, _moveOffsetMax);
+        float moveZ = UnityEngine.Random.Range(_moveOffsetMin, _moveOffsetMax);
 
-        float moveX = 0, moveY =0,moveZ = 0;
-        Vector3 moveDir;
-
-        moveX = UnityEngine.Random.Range(_moveOffsetMin,_moveOffsetMax);
-        moveY = UnityEngine.Random.Range(_moveOffsetMin,_moveOffsetMax);
-        moveZ = UnityEngine.Random.Range(_moveOffsetMin,_moveOffsetMax);
-
-        moveDir = new Vector3(moveX, moveY, moveZ);
-
-        return moveDir;
-
+        return new Vector3(moveX, 0f, moveZ);
     }
 
     void shoot()

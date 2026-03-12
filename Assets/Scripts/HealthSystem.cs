@@ -30,4 +30,8 @@ public class HealthSystem
             onDeath?.Invoke(this, EventArgs.Empty);
         }
     }
+    public void ResetHealth()
+    {
+        _currentHealth = _maxHealth;
+    }
 }
