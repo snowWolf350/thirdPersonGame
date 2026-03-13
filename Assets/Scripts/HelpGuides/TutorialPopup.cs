@@ -9,8 +9,10 @@ public class TutorialPopup : MonoBehaviour
     [SerializeField] TextMeshProUGUI _HeadingText;
     [SerializeField] TextMeshProUGUI _contentText;
 
+    Animator _animator;
     private void Start()
     {
+        _animator = GetComponent<Animator>();
         tutorialTrigger.OnTutorialEnter += TutorialTrigger_OnTutorialEnter; ;
         tutorialTrigger.OnTutorialExit += TutorialTrigger_OnTutorialExit1; ;
         Hide();
@@ -28,6 +30,7 @@ public class TutorialPopup : MonoBehaviour
         _HeadingText.text = e.tutorialSO.Heading;
         _contentText.text = e.tutorialSO.Content;
         Show();
+        _animator.SetTrigger("isEnabled");
     }
 
     void Show()
