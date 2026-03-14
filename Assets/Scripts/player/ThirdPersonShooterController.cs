@@ -23,6 +23,7 @@ public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagabl
     HealthSystem _healthSystem;
 
     public event EventHandler<IHasProgress.onProgressChangedEventArgs> onProgressChanged;
+    public static event EventHandler OnPlayerShoot;
 
     private void Awake()
     {
@@ -62,6 +63,7 @@ public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagabl
 
         if (starterAssetsInputs.shoot)
         {
+            OnPlayerShoot?.Invoke(this, EventArgs.Empty);
             Vector3 aimDir = (mouseWorldPosition - spawnBulletTransform.position).normalized;
             Instantiate(bulletPrefab,spawnBulletTransform.position,Quaternion.LookRotation(aimDir,Vector3.up));
             starterAssetsInputs.shoot = false;

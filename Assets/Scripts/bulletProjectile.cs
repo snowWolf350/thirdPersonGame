@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,6 +8,14 @@ public class bulletProjectile : MonoBehaviour
     [SerializeField]GameObject _BulletImpactFX;
     float speed = 40;
     int damageAmount = 10;
+
+    public static event EventHandler<OnBulletImpactEventArgs> OnBulletImpact;
+
+    public class OnBulletImpactEventArgs:EventArgs
+    {
+        public Vector3 impactPosition;
+    }
+
     private void Awake()
     {
         _bulletRigidbody = GetComponent<Rigidbody>();
@@ -18,6 +27,10 @@ public class bulletProjectile : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        OnBulletImpact?.Invoke(this, new OnBulletImpactEventArgs
+        {
+            impactPosition = collision.GetContact(0).point
+        });
         if(collision.gameObject.TryGetComponent(out IDamagable damagable))
         {
             damagable.TakeDamage(damageAmount, collision.GetContact(0).point);
