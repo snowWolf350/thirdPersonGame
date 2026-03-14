@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
     [SerializeField] Transform _playerTransform;
     [SerializeField] Transform _enemyBullet;
     [SerializeField] Transform _enemyBulletSpawn;
+    [SerializeField] Transform _explosionFX;
 
     float _shootDelayTimer = 0;
     float _shootDelayTimerMax;
@@ -129,6 +130,7 @@ public class Enemy : MonoBehaviour,IHasProgress,IDamagable
     }
     private void _healthSystem_onDeath(object sender, EventArgs e)
     {
+        Instantiate(_explosionFX,transform.position,Quaternion.identity);
         Destroy(gameObject);
     }
 

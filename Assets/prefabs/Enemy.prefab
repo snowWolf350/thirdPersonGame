@@ -380,6 +380,7 @@ MonoBehaviour:
   _playerTransform: {fileID: 0}
   _enemyBullet: {fileID: 4399134987321242627, guid: b9caf53672b0937458080ef79140d704, type: 3}
   _enemyBulletSpawn: {fileID: 4851828687714915164}
+  _explosionFX: {fileID: 5832382529336907509, guid: 42198c4e29f61fa43923182acdb64ad5, type: 3}
 --- !u!54 &166375088961269637
 Rigidbody:
   m_ObjectHideFlags: 0
