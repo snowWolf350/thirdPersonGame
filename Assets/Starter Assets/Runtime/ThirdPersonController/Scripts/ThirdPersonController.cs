@@ -109,6 +109,7 @@ namespace StarterAssets
         private GameObject _mainCamera;
 
         private const float _threshold = 0.01f;
+        bool canMove = true;
 
         private bool IsCurrentDeviceMouse
         {
@@ -153,9 +154,13 @@ namespace StarterAssets
 
         private void Update()
         {
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
+            if (canMove)
+            {
+                Move(); 
+                JumpAndGravity();
+                GroundedCheck();
+            }
+
         }
 
         private void LateUpdate()
@@ -386,6 +391,25 @@ namespace StarterAssets
         public void resetVerticalVelocity()
         {
             _verticalVelocity = 0;
+        }
+
+        public void SetCanMove(bool boolToSet)
+        {
+            if (boolToSet == true)
+            {
+                _controller.enabled = true;
+            }
+            else
+            {
+                _controller.enabled = false;
+                _animator.SetBool(_animIDFreeFall, false);
+                _animator.SetBool(_animIDJump, false);
+                _animator.SetFloat(_animIDSpeed, 0);
+
+                _verticalVelocity = 0;
+            }
+
+                canMove = boolToSet;
         }
     }
 }

@@ -24,6 +24,7 @@ public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagabl
 
     public event EventHandler<IHasProgress.onProgressChangedEventArgs> onProgressChanged;
     public static event EventHandler OnPlayerShoot;
+    public static event EventHandler OnPlayerDeath;
 
     private void Awake()
     {
@@ -31,6 +32,11 @@ public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagabl
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
         thirdPersonController = GetComponent<ThirdPersonController>();
     }
+    private void Start()
+    {
+        _healthSystem.onDeath += _healthSystem_onDeath;
+    }
+
 
     private void Update()
     {
@@ -78,6 +84,13 @@ public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagabl
             progressNormalized = _healthSystem.GetHealthNormalized()
         });
     }
+
+    private void _healthSystem_onDeath(object sender, EventArgs e)
+    {
+        OnPlayerDeath?.Invoke(this, EventArgs.Empty);
+        thirdPersonController.SetCanMove(false);
+    }
+
     public void RespawnPlayer()
     {
         Vector3 playerOffset = new Vector3(0, 2, 0);

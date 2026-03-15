@@ -20,14 +20,30 @@ public class ClearEnemies : MonoBehaviour
         _remainingEnemies = _enemyList.Count;
     }
 
+    private void Start()
+    {
+        ThirdPersonShooterController.OnPlayerDeath += ThirdPersonShooterController_OnPlayerDeath;
+    }
+
+    private void ThirdPersonShooterController_OnPlayerDeath(object sender, System.EventArgs e)
+    {
+        SetEnemyStateIdle();
+    }
+
     private void Enemy_OnDeath(object sender, System.EventArgs e)
     {
-        Debug.Log("enemy Died");
         _remainingEnemies--;
         if (_remainingEnemies == 0)
         {
-            Debug.Log("Room CLeared");
             OnRoomCleared.Invoke();
+        }
+    }
+
+    void SetEnemyStateIdle()
+    {
+        foreach(Enemy enemy in _enemyList)
+        {
+            enemy.SetIdleState();
         }
     }
 }
