@@ -67,12 +67,26 @@ public class ThirdPersonShooterController : MonoBehaviour,IHasProgress,IDamagabl
             thirdPersonController.setRotateOnMove(true);
         }
 
-        if (starterAssetsInputs.shoot)
+        if (starterAssetsInputs.shoot && GameManager.Instance.GameIsPlaying())
         {
             OnPlayerShoot?.Invoke(this, EventArgs.Empty);
             Vector3 aimDir = (mouseWorldPosition - spawnBulletTransform.position).normalized;
             Instantiate(bulletPrefab,spawnBulletTransform.position,Quaternion.LookRotation(aimDir,Vector3.up));
             starterAssetsInputs.shoot = false;
+        }
+        if (starterAssetsInputs.escape)
+        {
+            if (GameManager.Instance.GameIsPaused() == false)
+            {
+                starterAssetsInputs.SetCursorLocked(false);
+                GameManager.Instance.SetGameState(GameManager.gameState.paused);
+            }
+            else
+            {
+                starterAssetsInputs.SetCursorLocked(true);
+                GameManager.Instance.SetGameState(GameManager.gameState.playing);
+            }
+            starterAssetsInputs.escape = false;
         }
     }
 

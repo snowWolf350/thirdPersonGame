@@ -191,6 +191,7 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
+            if (!_input.cursorLocked) return;
             // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
