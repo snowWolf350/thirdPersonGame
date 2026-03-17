@@ -7,6 +7,19 @@ public class Robot : MonoBehaviour
     Vector3 aimDirection;
 
     [SerializeField] LayerMask aimLayerMask;
+    [SerializeField] Animator _animator;
+
+    const string ONSHOOT = "onShoot";
+
+    private void Start()
+    {
+        ThirdPersonShooterController.OnPlayerShoot += ThirdPersonShooterController_OnPlayerShoot;
+    }
+
+    private void ThirdPersonShooterController_OnPlayerShoot(object sender, System.EventArgs e)
+    {
+        _animator.SetTrigger(ONSHOOT); 
+    }
 
     private void Update()
     {
