@@ -8,6 +8,8 @@ public class bulletProjectile : MonoBehaviour
     float speed = 40;
     int damageAmount = 10;
 
+    public bool damagePlayer;
+
     public static event EventHandler<OnBulletImpactEventArgs> OnBulletImpact;
 
     public class OnBulletImpactEventArgs:EventArgs
@@ -32,7 +34,21 @@ public class bulletProjectile : MonoBehaviour
         });
         if(collision.gameObject.TryGetComponent(out IDamagable damagable))
         {
-            damagable.TakeDamage(damageAmount, collision.GetContact(0).point);
+            if (damagePlayer)
+            {
+                //can damagePlayer
+                damagable.TakeDamage(damageAmount, collision.GetContact(0).point); 
+            }
+            else
+            {
+                if (collision.transform.TryGetComponent(out ThirdPersonShooterController player))
+                {
+                    //this is the player
+                    Destroy(gameObject);
+                    return;
+                }
+                damagable.TakeDamage(damageAmount, collision.GetContact(0).point);
+            }
         }
         Instantiate(_BulletImpactFX, collision.GetContact(0).point, Quaternion.identity);
         Destroy(gameObject);

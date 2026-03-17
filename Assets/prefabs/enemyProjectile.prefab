@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7402459756878728210}
   - component: {fileID: 7621757581728143740}
   m_Layer: 7
-  m_Name: projectile
+  m_Name: enemyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::bulletProjectile
   _BulletImpactFX: {fileID: 6096650656531803589, guid: 992007b2e74563e4db81ae557c352756, type: 3}
+  damagePlayer: 1
 --- !u!1 &8558809863649017362
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +163,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 750693ffaededee4d8fb36106bd2ad6d, type: 2}
+  - {fileID: 2100000, guid: 3ecf911d55d62af47a8a076e23dd159d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
